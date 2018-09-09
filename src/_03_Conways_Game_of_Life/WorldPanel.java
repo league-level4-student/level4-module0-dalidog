@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.JPanel;
@@ -97,37 +98,40 @@ public class WorldPanel extends JPanel implements MouseListener, ActionListener 
 
 	// advances world one step
 	public void step() {
-		//7. iterate through cells and get their neighbors
-		int neighborcount = 0;
-	for (int i = 0; i < cells.length; i++) {
-		for (int j = 0; j < cells.length; j++) {
-			for (int j2 = getX()-1; j2 < getX()+1; j2++) {
-				for (int k = getY()-1; k < getY()+1; k++) {
-					if(j2<getX()-1||j2>getX()+1||k<getY()-1||k>getY()+1) {
-						
-					}
-					else {
-						if(cells[j2][k].isAlive== true) {
-						neighborcount = neighborcount+1;
-					}
-				}
+		// 7. iterate through cells and get their neighbors
+		for (int i = 0; i < cells.length; i++) {
+			for (int j = 0; j < cells.length; j++) {
+
+				cells[i][j].liveOrDie(getLivingNeighbors(i, j).size());
 			}
+
+			// 8. check if each cell should live or die
+
 		}
-	}
-		
-		//8. check if each cell should live or die
-	cells[][].liveordie();
-		
-		
-		
+
 		repaint();
 	}
 
 	// 9. Complete the method.
 	// It returns an array list of the 8 or less neighbors of the
 	// cell identified by x and y
-	public int getLivingNeighbors(int x, int y) {
-		return 0;
+	public ArrayList<Cell> getLivingNeighbors(int x, int y) {
+		ArrayList<Cell> neigh = new ArrayList<Cell>();
+
+		for (int j2 = x - 1; j2 < x + 1; j2++) {
+			for (int k = y - 1; k < y + 1; k++) {
+
+				if (j2 < 0 || j2 > cells.length - 1 || k < 0 || k > cells.length - 1) {
+				} else {
+					if (cells[j2][k].isAlive == true) {
+						neigh.add(cells[j2][k]);
+					}
+				}
+
+			}
+
+		}
+		return neigh;
 	}
 
 	@Override
@@ -150,8 +154,10 @@ public class WorldPanel extends JPanel implements MouseListener, ActionListener 
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// 10. Use e.getX() and e.getY() to determine
-		// which cell is clicked. Then toggle
+		// which cell is clicked. Then change
 		// the isAlive variable for that cell.
+		int x = e.getX();
+		int y = e.getY();
 
 		repaint();
 	}
