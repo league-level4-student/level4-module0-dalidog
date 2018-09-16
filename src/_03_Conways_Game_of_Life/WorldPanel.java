@@ -37,8 +37,8 @@ public class WorldPanel extends JPanel implements MouseListener, ActionListener 
 		// Don't forget to consider the cell's dimensions when
 		// passing in the location.
 		for (int i = 0; i < cells.length; i++) {
-			for (int j = 0; j < cells.length; j++) {
-				cells[i][j] = new Cell(i, j, cellSize);
+			for (int j = 0; j < cells[i].length; j++) {
+				cells[i][j] = new Cell(i * cellSize, j * cellSize, cellSize);
 			}
 		}
 	}
@@ -47,8 +47,8 @@ public class WorldPanel extends JPanel implements MouseListener, ActionListener 
 		// 4. Iterate through each cell and randomly set each
 		// cell's isAlive memeber to true of false
 		for (int i = 0; i < cells.length; i++) {
-			for (int j = 0; j < cells.length; j++) {
-				int r = new Random().nextInt(1);
+			for (int j = 0; j < cells[i].length; j++) {
+				int r = new Random().nextInt(2);
 				if (r == 0) {
 					cells[i][j].isAlive = true;
 				} else {
@@ -63,7 +63,7 @@ public class WorldPanel extends JPanel implements MouseListener, ActionListener 
 	public void clearCells() {
 		// 5. Iterated through the cells and set them all to dead.
 		for (int i = 0; i < cells.length; i++) {
-			for (int j = 0; j < cells.length; j++) {
+			for (int j = 0; j < cells[i].length; j++) {
 				cells[i][j].isAlive = false;
 			}
 		}
@@ -87,7 +87,7 @@ public class WorldPanel extends JPanel implements MouseListener, ActionListener 
 		// 6. Iterate through the cells and draw them all
 		for (int i = 0; i < cells.length; i++) {
 			for (int j = 0; j < cells.length; j++) {
-				g.drawRect(i, j, cellSize * cellsPerRow, cellSize * cellsPerRow);
+				g.drawRect(i * cellSize, j * cellSize, cellSize, cellSize);
 			}
 		}
 
@@ -156,9 +156,14 @@ public class WorldPanel extends JPanel implements MouseListener, ActionListener 
 		// 10. Use e.getX() and e.getY() to determine
 		// which cell is clicked. Then change
 		// the isAlive variable for that cell.
-		int x = e.getX();
-		int y = e.getY();
+		int x = e.getX() / cellSize;
+		int y = e.getY() / cellSize;
 
+		if (cells[x][y].isAlive == true) {
+			cells[x][y].isAlive = false;
+		} else if (cells[x][y].isAlive == false) {
+			cells[x][y].isAlive = true;
+		}
 		repaint();
 	}
 
