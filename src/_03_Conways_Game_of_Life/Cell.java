@@ -5,7 +5,7 @@ import java.awt.Graphics;
 
 public class Cell implements Drawable {
 	public boolean isAlive = false;
-
+	public boolean markForDeath = false;
 	private int x;
 	private int y;
 
@@ -29,13 +29,13 @@ public class Cell implements Drawable {
 	 */
 	public void liveOrDie(int numNeighbors) {
 		if (isAlive == true && numNeighbors < 2) {
-			isAlive = false;
+			markForDeath = true;
 		} else if (isAlive == true && numNeighbors == 2 || numNeighbors == 3) {
-			isAlive = true;
+			markForDeath = false;
 		} else if (isAlive == true && numNeighbors > 3) {
-			isAlive = false;
+			markForDeath = true;
 		} else if (isAlive == false && numNeighbors == 3) {
-			isAlive = true;
+			markForDeath = false;
 		}
 	}
 
@@ -57,7 +57,9 @@ public class Cell implements Drawable {
 			g.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
 		}
 		if (isAlive == false) {
+			g.setColor(Color.black);
 			g.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
 		}
+		System.out.println("make them pink");
 	}
 }

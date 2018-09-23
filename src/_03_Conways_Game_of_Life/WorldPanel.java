@@ -38,7 +38,7 @@ public class WorldPanel extends JPanel implements MouseListener, ActionListener 
 		// passing in the location.
 		for (int i = 0; i < cells.length; i++) {
 			for (int j = 0; j < cells[i].length; j++) {
-				cells[i][j] = new Cell(i * cellSize, j * cellSize, cellSize);
+				cells[i][j] = new Cell(i, j, cellSize);
 			}
 		}
 	}
@@ -51,11 +51,11 @@ public class WorldPanel extends JPanel implements MouseListener, ActionListener 
 				int r = new Random().nextInt(2);
 				if (r == 0) {
 					cells[i][j].isAlive = true;
-				} else {
+				} else if (r == 1) {
 					cells[i][j].isAlive = false;
 				}
 			}
-
+			System.out.println("random is alive");
 		}
 		repaint();
 	}
@@ -86,8 +86,8 @@ public class WorldPanel extends JPanel implements MouseListener, ActionListener 
 	public void paintComponent(Graphics g) {
 		// 6. Iterate through the cells and draw them all
 		for (int i = 0; i < cells.length; i++) {
-			for (int j = 0; j < cells.length; j++) {
-				g.drawRect(i * cellSize, j * cellSize, cellSize, cellSize);
+			for (int j = 0; j < cells[i].length; j++) {
+				cells[i][j].draw(g);
 			}
 		}
 
@@ -108,6 +108,19 @@ public class WorldPanel extends JPanel implements MouseListener, ActionListener 
 			// 8. check if each cell should live or die
 
 		}
+		for (int i = 0; i < cells.length; i++) {
+			for (int j = 0; j < cells.length; j++) {
+
+				if (cells[i][j].markForDeath == true) {
+					cells[i][j].isAlive = false;
+				} else {
+					cells[i][j].isAlive = true;
+				}
+			}
+
+			// 8. check if each cell should live or die
+
+		}
 
 		repaint();
 	}
@@ -118,12 +131,14 @@ public class WorldPanel extends JPanel implements MouseListener, ActionListener 
 	public ArrayList<Cell> getLivingNeighbors(int x, int y) {
 		ArrayList<Cell> neigh = new ArrayList<Cell>();
 
-		for (int j2 = x - 1; j2 < x + 1; j2++) {
-			for (int k = y - 1; k < y + 1; k++) {
+		for (int j2 = x - 1; j2 <= x + 1; j2++) {
+			for (int k = y - 1; k <= y + 1; k++) {
 
-				if (j2 < 0 || j2 > cells.length - 1 || k < 0 || k > cells.length - 1) {
+				if (j2 < 0 || j2 > cells.length - 1 || k < 0 || k > cells.length - 1 || (j2 == x && k == y)) {
+
 				} else {
 					if (cells[j2][k].isAlive == true) {
+
 						neigh.add(cells[j2][k]);
 					}
 				}
@@ -132,6 +147,7 @@ public class WorldPanel extends JPanel implements MouseListener, ActionListener 
 
 		}
 		return neigh;
+
 	}
 
 	@Override
@@ -158,7 +174,7 @@ public class WorldPanel extends JPanel implements MouseListener, ActionListener 
 		// the isAlive variable for that cell.
 		int x = e.getX() / cellSize;
 		int y = e.getY() / cellSize;
-
+		System.out.println("mouse pressed method");
 		if (cells[x][y].isAlive == true) {
 			cells[x][y].isAlive = false;
 		} else if (cells[x][y].isAlive == false) {
