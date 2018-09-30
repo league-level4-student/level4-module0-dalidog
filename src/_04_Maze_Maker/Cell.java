@@ -22,7 +22,7 @@ public class Cell {
 		this.x = x;
 		this.y = y;
 		
-		visited = false;
+		setVisited(false);
 		
 		northWall = true;
 		southWall = true;
@@ -66,11 +66,11 @@ public class Cell {
 	}
 
 	public boolean hasBeenVisited() {
-		return visited;
+		return isVisited();
 	}
 
 	public void setBeenVisited(boolean beenVisited) {
-		this.visited = beenVisited;
+		this.setVisited(beenVisited);
 	}
 
 	public boolean hasNorthWall() {
@@ -103,5 +103,13 @@ public class Cell {
 
 	public void setWestWall(boolean westWall) {
 		this.westWall = westWall;
+	}
+
+	public boolean isVisited() {
+		return visited;
+	}
+
+	public void setVisited(boolean visited) {
+		this.visited = visited;
 	}
 }
