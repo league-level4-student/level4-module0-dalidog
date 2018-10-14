@@ -5,7 +5,7 @@
   int number=14;
   int x;
   int y;
-  int row =0;
+  int row = 0;
 void setup(){
   width=30;
   height=12;
@@ -15,14 +15,15 @@ void setup(){
  
 }
 void draw(){ 
-   for(int i=0;i<number;i++){
+   for(int i=0;i<number+1;i++){
       Brick b = new Brick(x,y,width,height);
       x=x+30;
-      row=row+1;
+     
     }
+     row=row+1;
     number=number-1;
     y=y-12;
-    x=40-(15*row);
+    x=40+(15*row);
 }
 
   
