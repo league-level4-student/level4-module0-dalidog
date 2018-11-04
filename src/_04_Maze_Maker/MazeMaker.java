@@ -13,9 +13,7 @@ public class MazeMaker {
 
 	private static Random randGen = new Random();
 	private static Stack<Cell> uncheckedCells = new Stack<Cell>();
-	private static ArrayList<Cell> cellarray = new ArrayList<Cell>();
 	public static boolean hasUnvisitedNeighbors = false;
-	static Cell newCell;
 
 	public static Maze generateMaze(int w, int h) {
 		width = w;
@@ -38,8 +36,10 @@ public class MazeMaker {
 		getUnvisitedNeighbors(currentCell);
 
 		// C. if has unvisited neighbors,
-		if (hasUnvisitedNeighbors == true) {
+		Random r = new Random();
 
+		if (getUnvisitedNeighbors(currentCell).size() > 0) {
+			Cell newCell = getUnvisitedNeighbors(currentCell).get(r.nextInt(getUnvisitedNeighbors(currentCell).size()));
 			uncheckedCells.push(newCell);
 			// C1. select one at random.
 
@@ -52,8 +52,10 @@ public class MazeMaker {
 			currentCell.setVisited(true);
 		} else {
 			// D. if all neighbors are visited
-			if (uncheckedCells.size() != 0) {
-				currentCell = uncheckedCells.pop();
+			if (getUnvisitedNeighbors(currentCell).size() == 0) {
+				if (uncheckedCells.size() > 0) {
+					currentCell = uncheckedCells.pop();
+				}
 			}
 			// D1. if the stack is not empty
 
@@ -96,20 +98,19 @@ public class MazeMaker {
 	// Any unvisited neighbor of the passed in cell gets added
 	// to the ArrayList
 	private static ArrayList<Cell> getUnvisitedNeighbors(Cell c) {
-		if (maze.cells[c.getX() - 1][c.getY()].hasBeenVisited() == false) {
-			cellarray.add(maze.cells[c.getX() - 1][c.getY()]);
-			hasUnvisitedNeighbors = true;
-		} else if (maze.cells[c.getX() + 1][c.getY()].hasBeenVisited() == false) {
-			cellarray.add(maze.cells[c.getX() + 1][c.getY()]);
-			hasUnvisitedNeighbors = true;
-		} else if (maze.cells[c.getX()][c.getY() - 1].hasBeenVisited() == false) {
-			cellarray.add(maze.cells[c.getX()][c.getY() - 1]);
-			hasUnvisitedNeighbors = true;
-		} else if (maze.cells[c.getX()][c.getY() + 1].hasBeenVisited() == false) {
-			cellarray.add(maze.cells[c.getX()][c.getY() + 1]);
-			hasUnvisitedNeighbors = true;
+		ArrayList<Cell> cellarray = new ArrayList<Cell>();
+		for (int i = c.getX() - 1; i < c.getX() + 1; i++) {
+			for (int j = c.getY() - 1; j < c.getY() + 1; j++) {
+				if ((i == c.getX() && j == c.getY()) || (i == c.getX() - 1 && j == c.getY() - 1)
+						|| (i == c.getX() + 1 && j == c.getY() + 1) || (i == c.getX() - 1 && j == c.getY() + 1)
+						|| (i == c.getX() + 1 && j == c.getY() - 1)) {
+
+				} else if (i >= 0 && i < width && j >= 0 && j < height
+						&& maze.getCell(i, j).hasBeenVisited() == false) {
+					cellarray.add(maze.getCell(i, j));
+				}
+			}
 		}
-		newCell = cellarray.get(randGen.nextInt(cellarray.size() - 1));
 		return cellarray;
 	}
 
