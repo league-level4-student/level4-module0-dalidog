@@ -11,7 +11,7 @@ public class Cell {
 	
 	private int size = 100;
 	
-	private boolean visited;
+	private boolean visited=false;
 	
 	private boolean northWall;
 	private boolean southWall;

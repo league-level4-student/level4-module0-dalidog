@@ -33,13 +33,13 @@ public class MazeMaker {
 		// A. mark cell as visited
 		currentCell.setVisited(true);
 		// B. check for unvisited neighbors using the cell
-		getUnvisitedNeighbors(currentCell);
-
+		ArrayList<Cell>celery=getUnvisitedNeighbors(currentCell);
+		
 		// C. if has unvisited neighbors,
 		Random r = new Random();
 
-		if (getUnvisitedNeighbors(currentCell).size() > 0) {
-			Cell newCell = getUnvisitedNeighbors(currentCell).get(r.nextInt(getUnvisitedNeighbors(currentCell).size()));
+		if (celery.size() > 0){
+			Cell newCell = celery.get(r.nextInt(celery.size()));
 			uncheckedCells.push(newCell);
 			// C1. select one at random.
 
@@ -48,13 +48,15 @@ public class MazeMaker {
 			// C3. remove the wall between the two cells
 			removeWalls(currentCell, newCell);
 			// C4. make the new cell the current cell and mark it as visited
-			currentCell = newCell;
+			currentCell=newCell;
 			currentCell.setVisited(true);
+			selectNextPath(currentCell);
 		} else {
 			// D. if all neighbors are visited
-			if (getUnvisitedNeighbors(currentCell).size() == 0) {
+			if (celery.size() == 0) {
 				if (uncheckedCells.size() > 0) {
 					currentCell = uncheckedCells.pop();
+					selectNextPath(currentCell);
 				}
 			}
 			// D1. if the stack is not empty
@@ -83,11 +85,11 @@ public class MazeMaker {
 		if (Math.abs(c1.getY() - c2.getY()) == 1) {
 			if (c1.getX() == c2.getX()) {
 				if (c2.getY() > c1.getY()) {
-					c2.setSouthWall(false);
-					c1.setNorthWall(false);
-				} else {
 					c2.setNorthWall(false);
 					c1.setSouthWall(false);
+				} else {
+					c2.setSouthWall(false);
+					c1.setNorthWall(false);
 				}
 			}
 		}
@@ -111,7 +113,9 @@ public class MazeMaker {
 				}
 			}
 		}
+		System.out.println(cellarray.size());
 		return cellarray;
+	
 	}
 
 }
