@@ -101,8 +101,8 @@ public class MazeMaker {
 	// to the ArrayList
 	private static ArrayList<Cell> getUnvisitedNeighbors(Cell c) {
 		ArrayList<Cell> cellarray = new ArrayList<Cell>();
-		for (int i = c.getX() - 1; i < c.getX() + 1; i++) {
-			for (int j = c.getY() - 1; j < c.getY() + 1; j++) {
+		for (int i = c.getX() - 1; i <= c.getX() + 1; i++) {
+			for (int j = c.getY() - 1; j <= c.getY() + 1; j++) {
 				if ((i == c.getX() && j == c.getY()) || (i == c.getX() - 1 && j == c.getY() - 1)
 						|| (i == c.getX() + 1 && j == c.getY() + 1) || (i == c.getX() - 1 && j == c.getY() + 1)
 						|| (i == c.getX() + 1 && j == c.getY() - 1)) {
