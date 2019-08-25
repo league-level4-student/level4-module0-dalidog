@@ -1,20 +1,33 @@
 package _02_Pixel_Art;
 
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
-public class PixelArtMaker implements MouseListener{
+
+public class PixelArtMaker implements MouseListener, ActionListener{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JFrame window;
 	private GridInputPanel gip;
 	private GridPanel gp;
 	private JButton save;
 	ColorSelectionPanel csp;
-	int r;
-	int c;
+	int rows;
+	int columns;
+	private static final String DATA_FILE = "src/_02_Pixel_Art/savestate";
 	public void start() {
 		gip = new GridInputPanel(this);	
 		window = new JFrame("Pixel Art");
@@ -22,15 +35,17 @@ public class PixelArtMaker implements MouseListener{
 		window.setResizable(false);
 		save=new JButton("Save State");
 		window.add(save);
-		save.addMouseListener(this);
+		save.addActionListener(this);
 		window.add(gip);
 		window.pack();
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setVisible(true);
 	}
 
-	public void submitGridData(int w, int h,r, c) {
+	public void submitGridData(int w, int h, int r, int c) {
 		gp = new GridPanel(w, h, r, c);
+		r=rows;
+		c=columns;
 		csp = new ColorSelectionPanel();
 		window.remove(gip);
 		window.add(gp);
@@ -46,11 +61,7 @@ public class PixelArtMaker implements MouseListener{
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		if(e.getSource()==save) {
-			for (int i = 0; i < ; i++) {
-				
-			}
-		}
+		
 	}
 
 	@Override
@@ -72,5 +83,17 @@ public class PixelArtMaker implements MouseListener{
 
 	@Override
 	public void mouseExited(MouseEvent e) {
+	}
+	
+	
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		try (FileOutputStream fos = new FileOutputStream(new File(DATA_FILE)); ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+			oos.writeObject(gp);    //makes space in file for data, inputs incoming data
+		} catch (IOException j) {
+			j.printStackTrace();
+		}
 	}
 }
