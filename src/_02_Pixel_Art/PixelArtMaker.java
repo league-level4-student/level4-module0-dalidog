@@ -6,8 +6,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
@@ -40,10 +42,24 @@ public class PixelArtMaker implements MouseListener, ActionListener{
 		window.pack();
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setVisible(true);
+		
 	}
-
+	public GridPanel loadPixels(){
+		try (FileInputStream fis = new FileInputStream(DATA_FILE); ObjectInputStream ois = new ObjectInputStream(fis)) {
+			return (GridPanel) ois.readObject();
+		} catch (IOException e) {      
+			e.printStackTrace();
+			return null;
+		} catch (ClassNotFoundException e) {
+			// This can occur if the object we read from the file is not
+			// an instance of any recognized class
+			e.printStackTrace();
+			return null;
+		}
+	}
 	public void submitGridData(int w, int h, int r, int c) {
 		gp = new GridPanel(w, h, r, c);
+		gp=loadPixels();
 		r=rows;
 		c=columns;
 		csp = new ColorSelectionPanel();
